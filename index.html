@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Super Mario Bros Clone</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="game-wrapper">
+    <header class="topbar">
+      <div class="status">Score: <span id="score">0</span></div>
+      <div class="status">Lives: <span id="lives">3</span></div>
+      <div class="status">Level: <span id="level">1</span></div>
+      <div class="status">Ammo: <span id="ammo">0</span></div>
+    </header>
+    <div id="editorPanel" class="editor-toolbar">
+      <div class="editor-panel">
+        <h2>Редактор уровней</h2>
+        <p class="editor-hint">Выберите тип блока и кликайте по полю ниже. ПКМ — стереть плитку.</p>
+        <div class="editor-tools">
+          <button type="button" class="tile-type-button active" data-tile=".">Пусто</button>
+          <button type="button" class="tile-type-button" data-tile="#">Кирпич</button>
+          <button type="button" class="tile-type-button" data-tile="B">Кирпич2</button>
+          <button type="button" class="tile-type-button" data-tile="M">Коробка</button>
+          <button type="button" class="tile-type-button" data-tile="C">Монета</button>
+          <button type="button" class="tile-type-button" data-tile="G">Goomba</button>
+          <button type="button" class="tile-type-button" data-tile="K">Koopa</button>
+          <button type="button" class="tile-type-button" data-tile="F">Флаг</button>
+          <button type="button" class="tile-type-button" data-tile="S">Магазин</button>
+        </div>
+        <div class="editor-actions">
+          <button type="button" id="saveLevelButton">Сохранить уровень</button>
+          <button type="button" id="playCustomButton">Играть кастомный</button>
+          <button type="button" id="clearLevelButton">Очистить</button>
+          <button type="button" id="backToMenuButton">Назад</button>
+        </div>
+      </div>
+    </div>
+    <div id="game">
+      <div id="comboDisplay" class="combo-display">
+        <div class="combo-title">COMBO</div>
+        <div class="combo-value" id="comboValue">x1</div>
+        <div class="combo-bar-container">
+          <div class="combo-bar" id="comboBar"></div>
+        </div>
+      </div>
+    </div>
+    <div class="instructions">
+      Управление: стрелки влево/вправо, пробел / стрелка вверх для прыжка, Z — выстрел.
+    </div>
+  </div>
+  <div id="menu" class="overlay visible">
+    <div class="menu-panel">
+      <h1>Super Mario Bros</h1>
+      <div class="menu-text">
+        <label for="characterSelect">Персонаж:</label>
+        <select id="characterSelect"></select>
+      </div>
+      <div class="menu-buttons">
+        <button type="button" id="startButton">Играть</button>
+        <button type="button" id="scoreboardButton">Scoreboard</button>
+        <button type="button" id="editorButton">Редактор</button>
+        <button type="button" id="musicToggleButton">Отключить музыку</button>
+      </div>
+      <div class="menu-text">
+        <p>Стрелки влево/вправо — движение, пробел / стрелка вверх — прыжок, Z — выстрел.</p>
+      </div>
+      <div id="scoreboardContainer" class="scoreboard hidden">
+        <h2>Таблица рекордов</h2>
+        <div class="scoreboard-row scoreboard-header">
+          <span>Игрок</span>
+          <span>Уровни</span>
+          <span>Очки</span>
+        </div>
+        <div id="scoreboardList" class="scoreboard-list"></div>
+      </div>
+    </div>
+  </div>
+  <audio id="bgMusic" loop preload="auto">
+    <source src="background.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <!-- Shop Modal Overlay -->
+  <div id="shopModal" class="overlay">
+    <div class="menu-panel shop-panel">
+      <h1 style="color: #ffdd57; text-shadow: 0 0 10px rgba(255,221,87,0.5); font-size: 2rem; margin: 0 0 8px;">МАГАЗИН</h1>
+      <p style="margin-bottom: 16px;">Ваши очки: <span id="shopPoints" style="color: #ffdd57; font-weight: bold;">0</span></p>
+      <div class="shop-item">
+        <div class="shop-item-icon" style="background-image: url('sniperrifle.png');"></div>
+        <div class="shop-item-details">
+          <h3 style="margin: 0 0 4px; font-size: 1.15rem; color: #ffdd57;">Снайперская Винтовка</h3>
+          <p style="margin: 0 0 4px; font-size: 0.85rem;">Урон: <strong>x3 (убивает босса за 1 выстрел)</strong></p>
+          <p style="margin: 0 0 4px; font-size: 0.85rem;">Патроны: <strong>2</strong></p>
+          <p style="margin: 0 0 4px; font-size: 0.85rem;">Особенности: <strong>Снаряд разрушает до 3 блоков и пробивает до 3 врагов разом!</strong></p>
+          <p class="price" style="margin: 8px 0 0; font-size: 0.95rem;">Цена: <strong style="color: #ffdd57;">500 очков</strong></p>
+        </div>
+        <button type="button" id="buySniperButton" class="buy-button">Купить</button>
+      </div>
+      <div class="menu-buttons" style="margin-top: 24px; display: flex; justify-content: center;">
+        <button type="button" id="closeShopButton" style="background: #e63946; color: #fff;">Выйти</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

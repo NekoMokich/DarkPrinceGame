@@ -1,0 +1,531 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at top, #70caff 20%, #1455a8 80%);
+  color: #f4f1e0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.game-wrapper {
+  width: 960px;
+  padding: 16px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+#game {
+  position: relative;
+  width: 960px;
+  height: 480px;
+  overflow: hidden;
+  border: 4px solid #3b1f09;
+  background: linear-gradient(to top, #5b8a20 0%, #8fc95c 40%, #88cff5 100%);
+}
+
+#game.gray {
+  background: linear-gradient(to top, #444 0%, #666 45%, #888 100%);
+}
+
+#world {
+  position: relative;
+  height: 100%;
+  will-change: transform;
+}
+
+#game::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.08) 0%, transparent 14%),
+                    radial-gradient(circle at 80% 40%, rgba(255,255,255,0.06) 0%, transparent 12%);
+  pointer-events: none;
+}
+
+.player,
+.tile,
+.enemy,
+.coin,
+.flag {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  image-rendering: pixelated;
+}
+
+.player {
+  background-repeat: no-repeat;
+  background-size: contain;
+  z-index: 10;
+}
+
+.tile {
+  width: 48px;
+  height: 48px;
+}
+
+.brick,
+.brick2 {
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.brick {
+  background-image: url('brick.png');
+}
+
+.brick2 {
+  background-image: url('brick2.png');
+}
+
+.cursor-platform {
+  background: rgba(255, 255, 255, 0.35);
+  border: 2px dashed #ffea00;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+}
+
+.coin,
+.enemy,
+.flag,
+.powerup,
+.projectile {
+  width: 48px;
+  height: 48px;
+}
+
+.powerup,
+.projectile {
+  position: absolute;
+  image-rendering: pixelated;
+}
+
+.coin,
+.enemy,
+.flag {
+  width: 48px;
+  height: 48px;
+}
+
+.coin {
+  background-image: url('coin.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.enemy.goomba {
+  background-image: url('goomba.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.enemy.koopa {
+  background-image: url('koopa.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.enemy.boss {
+  background-image: url('boss.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+  width: 64px;
+  height: 64px;
+}
+
+.mystery-box {
+  background-image: url('box.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.powerup-gun {
+  background-image: url('powerup.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.powerup-poison {
+  background-image: url('poison.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.projectile {
+  width: 16px;
+  height: 16px;
+  background-image: url('projectile.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.fireball {
+  position: absolute;
+  image-rendering: pixelated;
+  width: 18px;
+  height: 18px;
+  background-image: url('fireball.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.flag {
+  background-image: url('flag.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.instructions {
+  margin-top: 12px;
+  text-align: center;
+  font-size: 0.95rem;
+  color: #fcf3d8;
+}
+
+.message {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 18px 24px;
+  border: 3px solid #000;
+  background: rgba(10, 10, 10, 0.9);
+  color: #fff;
+  font-size: 1.25rem;
+  text-align: center;
+  z-index: 999;
+}
+
+button.retry {
+  margin-top: 12px;
+  padding: 10px 16px;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  background: #ffdd57;
+  color: #2e160c;
+  border-radius: 4px;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  color: #fff;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.menu-panel {
+  background: rgba(28, 16, 8, 0.95);
+  border: 3px solid #ffe873;
+  padding: 32px;
+  width: min(460px, 90vw);
+  text-align: center;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.menu-panel h1 {
+  margin: 0 0 16px;
+  font-size: 2rem;
+  letter-spacing: 0.1em;
+}
+
+.menu-panel p {
+  margin: 0 0 12px;
+  line-height: 1.5;
+}
+
+.menu-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin: 18px 0;
+}
+
+.menu-buttons button,
+.menu-panel button {
+  padding: 12px 18px;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  background: #ffdd57;
+  color: #2e160c;
+  border-radius: 6px;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.menu-buttons button:hover,
+.menu-panel button:hover {
+  transform: translateY(-1px);
+  background: #ffe97d;
+}
+
+.menu-text {
+  margin: 0 0 16px;
+}
+
+.scoreboard.hidden {
+  display: none;
+}
+
+.scoreboard {
+  margin-top: 24px;
+  text-align: left;
+}
+
+.editor-toolbar {
+  display: none;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.editor-toolbar.visible {
+  display: block;
+}
+
+.game-wrapper.editor-active .instructions {
+  display: none;
+}
+
+.editor-panel {
+  width: 100%;
+  background: rgba(28, 16, 8, 0.95);
+  border: 3px solid #ffe873;
+  padding: 16px 20px;
+  text-align: center;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.editor-panel h2 {
+  margin: 0 0 8px;
+  font-size: 1.35rem;
+  letter-spacing: 0.06em;
+}
+
+.editor-hint {
+  margin: 0 0 12px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: #f4f1e0;
+}
+
+.editor-tools {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0 0 12px;
+}
+
+.tile-type-button,
+.editor-actions button {
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border: none;
+  background: #ffdd57;
+  color: #2e160c;
+  border-radius: 6px;
+}
+
+.tile-type-button.active {
+  background: #fff;
+  color: #2e160c;
+  box-shadow: inset 0 0 0 2px #2e160c;
+}
+
+.editor-actions {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+
+.editor-actions button {
+  width: 100%;
+}
+
+.scoreboard h2 {
+  margin: 0 0 12px;
+  font-size: 1.2rem;
+}
+
+.scoreboard-row {
+  display: grid;
+  grid-template-columns: 1.4fr 0.9fr 0.9fr;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+
+.scoreboard-header {
+  font-weight: 700;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.scoreboard-list {
+  max-height: 240px;
+  overflow-y: auto;
+  margin-top: 8px;
+}
+
+.scoreboard-list .scoreboard-row {
+  margin-bottom: 6px;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* --- Combo System Styles --- */
+.combo-display {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: rgba(10, 10, 10, 0.85);
+  border: 2px solid #ffdd57;
+  border-radius: 8px;
+  padding: 8px 12px;
+  width: 120px;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  z-index: 100;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform: scale(0.9);
+}
+
+.combo-display.active {
+  display: flex;
+  animation: comboPulse 0.2s ease-out;
+  transform: scale(1);
+}
+
+@keyframes comboPulse {
+  0% { transform: scale(0.8); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+.combo-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #ffe97d;
+  letter-spacing: 0.1em;
+  margin-bottom: 2px;
+}
+
+.combo-value {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 0 10px rgba(255, 221, 87, 0.8);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+
+.combo-bar-container {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.combo-bar {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, #ffdd57, #ff6b6b);
+  border-radius: 3px;
+  transition: width 0.05s linear;
+}
+
+.floating-text {
+  position: absolute;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 900;
+  text-shadow: -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000, 2px 2px 0 #000, 0 0 12px rgba(255, 221, 87, 0.8);
+  pointer-events: none;
+  z-index: 99;
+  animation: floatUpAndFade 1.0s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes floatUpAndFade {
+  0% {
+    transform: translateY(0) scale(0.6);
+    opacity: 0;
+  }
+  15% {
+    transform: translateY(-15px) scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-55px) scale(0.9);
+    opacity: 0;
+  }
+}
+
+/* --- Shop & Sniper Rifle Powerup Styles --- */
+.shop-panel {
+  border-color: #ffdd57 !important;
+  width: min(500px, 95vw) !important;
+}
+
+.shop-item {
+  display: flex;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 12px;
+  margin: 16px 0;
+  align-items: center;
+  gap: 16px;
+  text-align: left;
+}
+
+.shop-item-icon {
+  width: 80px;
+  height: 80px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  image-rendering: pixelated;
+  flex-shrink: 0;
+}
+
+.shop-item-details {
+  flex-grow: 1;
+}
+
+.buy-button {
+  padding: 10px 14px !important;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.flag-shop {
+  background-image: url('flagshop.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
